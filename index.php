@@ -1,8 +1,18 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 define('COMMENTS_PER_PAGE', 5);
+
+if (preg_match('/^[1-9][0-9]*$/', $_GET['page'])) {
+	$page = (int) $_GET["page"];
+} else {
+	$page = 1;
+}
+
 try {
 	$dbh = new PDO('sqlite:database.sqlite3');
+	$total = $dbh->query('SELECT count(*) FROM comments')->fetchColumn();
+	$totalPages = ceil($total / COMMENTS_PER_PAGE);
+	if ($page > $totalPages) $page = 1;
 	$offset = COMMENTS_PER_PAGE * ($page - 1);
 	$sql = 'SELECT * FROM comments LIMIT :offset , :count';
 	$stmt = $dbh->prepare($sql);
@@ -10,8 +20,6 @@ try {
 	$stmt->bindValue(':count', COMMENTS_PER_PAGE, PDO::PARAM_INT);
 	$stmt->execute();
 	$comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-	$total = $dbh->query('SELECT count(*) FROM comments')->fetchColumn();
-	$totalPages = ceil($total / COMMENTS_PER_PAGE);
 } catch(PDOException $e) {
 	echo $e->getMessage();
 	die();
