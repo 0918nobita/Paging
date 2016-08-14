@@ -43,6 +43,7 @@ try {
 <?php endif; ?>
 <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
 	<?php if ($page == $i) : ?>
+		<strong><?php echo $i; ?></strong>
 	<?php else : ?>
 		<a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
 	<?php endif; ?>
