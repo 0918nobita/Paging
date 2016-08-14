@@ -24,6 +24,8 @@ try {
 	echo $e->getMessage();
 	die();
 }
+$from = $offset + 1;
+$to = ($offset + COMMENTS_PER_PAGE) < $total ? ($offset + COMMENTS_PER_PAGE) : $total;
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -33,6 +35,7 @@ try {
 </head>
 <body>
 <h1>コメント一覧</h1>
+<p>全<?= $total ?>件中、<?= $from ?>件～<?= $to ?>件を表示しています</p>
 <ul>
 	<?php foreach ($comments as $comment) : ?>
 		<li><?php echo htmlspecialchars($comment['comment'],ENT_QUOTES, 'UTF-8'); ?></li>
