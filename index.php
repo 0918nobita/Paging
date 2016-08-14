@@ -42,7 +42,10 @@ try {
 	<a href="?page=<?php echo $page - 1 ?>">前</a>
 <?php endif; ?>
 <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
-	<a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+	<?php if ($page == $i) : ?>
+	<?php else : ?>
+		<a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+	<?php endif; ?>
 <?php endfor; ?>
 <?php if ($page < $totalPages) : ?>
 	<a href="?page=<?php echo $page + 1; ?>">次</a>
