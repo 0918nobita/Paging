@@ -10,6 +10,8 @@ try {
 	$stmt->bindValue(':count', COMMENTS_PER_PAGE, PDO::PARAM_INT);
 	$stmt->execute();
 	$comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	$total = $dbh->query('SELECT count(*) FROM comments')->fetchColumn();
+	$totalPages = ceil($total / COMMENTS_PER_PAGE);
 } catch(PDOException $e) {
 	echo $e->getMessage();
 	die();
@@ -23,8 +25,13 @@ try {
 </head>
 <body>
 <h1>コメント一覧</h1>
-<?php foreach ($comments as $comment) : ?>
-	<li><?php echo htmlspecialchars($comment['comment'],ENT_QUOTES,'UTF-8'); ?></li>
-<?php endforeach; ?>
+<ul>
+	<?php foreach ($comments as $comment) : ?>
+		<li><?php echo htmlspecialchars($comment['comment'],ENT_QUOTES, 'UTF-8'); ?></li>
+	<?php endforeach; ?>
+</ul>
+<?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+	<a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+<?php endfor; ?>
 </body>
 </html>
