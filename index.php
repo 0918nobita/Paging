@@ -10,10 +10,12 @@ if (preg_match('/^[1-9][0-9]*$/', $_GET['page'])) {
 
 try {
 	$dbh = new PDO('sqlite:database.sqlite3');
+	
 	$total = $dbh->query('SELECT count(*) FROM comments')->fetchColumn();
 	$totalPages = ceil($total / COMMENTS_PER_PAGE);
 	if ($page > $totalPages) $page = 1;
 	$offset = COMMENTS_PER_PAGE * ($page - 1);
+
 	$sql = 'SELECT * FROM comments LIMIT :offset , :count';
 	$stmt = $dbh->prepare($sql);
 	$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
@@ -42,17 +44,17 @@ $to = ($offset + COMMENTS_PER_PAGE) < $total ? ($offset + COMMENTS_PER_PAGE) : $
 	<?php endforeach; ?>
 </ul>
 <?php if ($page > 1) : ?>
-	<a href="?page=<?php echo $page - 1 ?>">前</a>
+	<a href="?page=<?= $page - 1 ?>">前</a>
 <?php endif; ?>
 <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
 	<?php if ($page == $i) : ?>
-		<strong><?php echo $i; ?></strong>
+		<strong><?= $i ?></strong>
 	<?php else : ?>
-		<a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+		<a href="?page=<?= $i ?>"><?= $i ?></a>
 	<?php endif; ?>
 <?php endfor; ?>
 <?php if ($page < $totalPages) : ?>
-	<a href="?page=<?php echo $page + 1; ?>">次</a>
+	<a href="?page=<?= $page + 1 ?>">次</a>
 <?php endif; ?>
 </body>
 </html>
