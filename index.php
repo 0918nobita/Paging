@@ -2,7 +2,7 @@
 error_reporting(E_ALL & ~E_NOTICE);
 define('COMMENTS_PER_PAGE', 5);
 
-if (preg_match('/^[1-9][0-9]*$/', $_GET['page'])) {
+if (ctype_digit($_GET["page"])) {
 	$page = (int) $_GET["page"];
 } else {
 	$page = 1;
@@ -10,7 +10,7 @@ if (preg_match('/^[1-9][0-9]*$/', $_GET['page'])) {
 
 try {
 	$dbh = new PDO('sqlite:database.sqlite3');
-	
+
 	$total = $dbh->query('SELECT count(*) FROM comments')->fetchColumn();
 	$totalPages = ceil($total / COMMENTS_PER_PAGE);
 	if ($page > $totalPages) $page = 1;
